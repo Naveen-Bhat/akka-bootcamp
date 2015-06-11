@@ -6,63 +6,66 @@ using System.Threading.Tasks;
 
 namespace WinTail
 {
-    #region Neutral/system messages
-
-    /// <summary>
-    /// Marker class to continue processing.
-    /// </summary>
-    public class ContinueProcessing { }
-
-    #endregion
-
-    #region Success messages
-
-    // in Messages.cs
-    /// <summary>
-    /// Base class for signalling that user input was valid.
-    /// </summary>
-    public class InputSuccess
+    public class Messages
     {
-        public InputSuccess(string reason)
+        #region Neutral/system messages
+
+        /// <summary>
+        /// Marker class to continue processing.
+        /// </summary>
+        public class ContinueProcessing { }
+
+        #endregion
+
+        #region Success messages
+
+        // in Messages.cs
+        /// <summary>
+        /// Base class for signalling that user input was valid.
+        /// </summary>
+        public class InputSuccess
         {
-            Reason = reason;
+            public InputSuccess(string reason)
+            {
+                Reason = reason;
+            }
+
+            public string Reason { get; private set; }
         }
 
-        public string Reason { get; private set; }
-    }
+        #endregion
 
-    #endregion
+        #region Error messages
 
-    #region Error messages
-
-    /// <summary>
-    /// Base class for signalling that user input was invalid.
-    /// </summary>
-    public class InputError
-    {
-        public InputError(string reason)
+        /// <summary>
+        /// Base class for signalling that user input was invalid.
+        /// </summary>
+        public class InputError
         {
-            Reason = reason;
+            public InputError(string reason)
+            {
+                Reason = reason;
+            }
+
+            public string Reason { get; private set; }
         }
 
-        public string Reason { get; private set; }
-    }
+        // <summary>
+        /// User provided blank input.
+        /// </summary>
+        public class NullInputError : InputError
+        {
+            public NullInputError(string reason) : base(reason) { }
+        }
 
-    // <summary>
-    /// User provided blank input.
-    /// </summary>
-    public class NullInputError : InputError
-    {
-        public NullInputError(string reason) : base(reason) { }
-    }
+        /// <summary>
+        /// User provided invalid input (currently, input w/ odd # chars)
+        /// </summary>
+        public class ValidationError : InputError
+        {
+            public ValidationError(string reason) : base(reason) { }
+        }
 
-    /// <summary>
-    /// User provided invalid input (currently, input w/ odd # chars)
-    /// </summary>
-    public class ValidationError : InputError
-    {
-        public ValidationError(string reason) : base(reason) { }
+        #endregion
     }
-
-    #endregion
 }
